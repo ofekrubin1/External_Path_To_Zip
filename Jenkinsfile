@@ -1,12 +1,24 @@
+// -----------------------------
+// Jenkinsfile (Scripted Pipeline)
+// -----------------------------
+
+// 1️⃣ Define job parameters
 properties([
     parameters([
-        string(name: 'PATH', defaultValue: 'default', description: 'Path value')
+        string(
+            name: 'PATH', 
+            defaultValue: 'default', 
+            description: 'Path value'
+        )
     ])
 ])
 
+// 2️⃣ Start pipeline node
 node {
+
+    // -----------------------------
     stage('Print parameters') {
-        // Get the user who triggered the build
+        // Get user who triggered the build (requires Build User Vars plugin)
         def user = env.BUILD_USER_ID ?: "unknown"
 
         // Get PATH parameter
@@ -17,11 +29,10 @@ node {
         echo "PATH parameter: ${path}"
     }
 
-    stage('Save parameters to JSON') {
-        // Directory to store JSON
-
+    // -----------------------------
+    stage('Create JSON') {
+        // Safe directory inside workspace
         def targetDir = "${env.WORKSPACE}/output"
-        def fileName = 'first_job.json'
 
         // Make sure the directory exists
         sh "mkdir -p ${targetDir}"
@@ -29,15 +40,24 @@ node {
         // Build JSON content
         def jsonContent = """
         {
-          "user": "${user}",
-          "path": "${path}"
+            "user": "${user ?: 'unknown'}",
+            "path": "${path}"
         }
         """
 
         // Write JSON file
-        writeFile file: "${targetDir}/${fileName}", text: jsonContent
+        writeFile file: "${targetDir}/first_job.json", text: jsonContent
 
-        // Optional: show content in console
-        sh "cat ${targetDir}/${fileName}"
+        // Optional: print content to console
+        sh "cat ${targetDir}/first_job.json"
+    }
+
+    // -----------------------------
+    stage('Archive JSON') {
+        // Make JSON available via Jenkins UI
+        archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
+
+        // Print a clickable download link
+        echo "Download JSON here: ${env.BUILD_URL}artifact/output/first_job.json"
     }
 }
