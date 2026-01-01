@@ -19,7 +19,8 @@ node {
 
     stage('Save parameters to JSON') {
         // Directory to store JSON
-        def targetDir = '/opt/artifacts'
+
+        def targetDir = "${env.WORKSPACE}/output"
         def fileName = 'first_job.json'
 
         // Make sure the directory exists
