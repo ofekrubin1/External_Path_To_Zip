@@ -29,8 +29,11 @@ node { // Must be inside node for shell and workspace
 
     stage('Create JSON') {
         def targetDir = "${env.WORKSPACE}/output"
-
+        echo targetDir
         // Create folder inside workspace
+        ls -ld /var/lib/jenkins/workspace
+        ls -ld /var/lib/jenkins/workspace/first_job
+
         sh "mkdir -p ${targetDir}"
 
         // Build JSON content
