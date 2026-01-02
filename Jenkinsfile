@@ -48,22 +48,25 @@ node {
     }
 
 
-    //stage('Create JSON') {
-    //    def targetDir = "${env.WORKSPACE}/output"
-    //    sh "mkdir -p ${targetDir}"
-//
-    //    def jsonContent = """
-    //    {
-    //        "user": "${user}",
-    //        "path": "${path}"
-    //    }
-    //    """
-//
-    //    writeFile file: "${targetDir}/first_job.json", text: jsonContent
-    //    sh "cat ${targetDir}/first_job.json"
-    //}
-//
-    //stage('Archive JSON') {
-    //    archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
-    //}
+    stage('Create JSON') {
+    
+        // Relative to workspace – Jenkins creates it automatically
+        def jsonFile = 'first_job.json'
+    
+        def jsonContent = """
+    {
+      "user": "${user}",
+      "path": "${path}"
+    }
+    """
+    
+        writeFile file: jsonFile, text: jsonContent
+    
+        echo "JSON file created at: ${env.WORKSPACE}/${jsonFile}"
+    }
+
+
+    stage('Archive JSON') {
+        archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
+    }
 }
