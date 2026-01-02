@@ -22,23 +22,31 @@ node {
     }
 
     stage('Validate PATH parameter') {
-        def pathRegex = '^//dev/files/operation systems/att/db/[^/]+/\\d{8}/[^/]*zip[^/]*$'
-
+    try {
+        def pathRegex = /^\/\/dev\/files\/operation systems\/att\/db\/[^\/]+\/\d{8}\/[^\/]*zip[^\/]*$/
 
         if (!(path ==~ pathRegex)) {
-            error """
-            Invalid PATH parameter!
-
-            Provided:
-            ${path}
-
-            Expected format:
-            //dev/files/operation systems/att/db/<name>/<YYYYMMDD>/<file-containing-zip>
-            """
+            throw new Exception("PATH format validation failed")
         }
 
-        echo "PATH format is valid"
+        echo "✅ PATH format is valid"
+
+    } catch (Exception e) {
+        error """
+        ❌ PATH validation error
+
+        Provided:
+        ${path}
+
+        Expected format:
+        //dev/files/operation systems/att/db/<name>/<YYYYMMDD>/<file-containing-zip>
+
+        Details:
+        ${e.message}
+        """
     }
+    }
+
 
     //stage('Create JSON') {
     //    def targetDir = "${env.WORKSPACE}/output"
