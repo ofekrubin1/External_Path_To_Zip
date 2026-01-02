@@ -22,7 +22,8 @@ node {
     }
 
     stage('Validate PATH parameter') {
-        def pathRegex = '^/dev/files/operation systems/att/db/[^/]+/\\d{8}/[^/]+\\.zip$'
+        def pathRegex = '^//dev/files/operation systems/att/db/[^/]+/\d{8}/[^/]*zip[^/]*$'
+
 
         if (!(path ==~ pathRegex)) {
             error """
@@ -32,29 +33,29 @@ node {
             ${path}
 
             Expected format:
-            /dev/files/operation systems/att/db/<name>/<YYYYMMDD>/<file>.zip
+            //dev/files/operation systems/att/db/<name>/<YYYYMMDD>/<file-containing-zip>
             """
         }
 
         echo "PATH format is valid"
     }
 
-    stage('Create JSON') {
-        def targetDir = "${env.WORKSPACE}/output"
-        sh "mkdir -p ${targetDir}"
-
-        def jsonContent = """
-        {
-            "user": "${user}",
-            "path": "${path}"
-        }
-        """
-
-        writeFile file: "${targetDir}/first_job.json", text: jsonContent
-        sh "cat ${targetDir}/first_job.json"
-    }
-
-    stage('Archive JSON') {
-        archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
-    }
+    //stage('Create JSON') {
+    //    def targetDir = "${env.WORKSPACE}/output"
+    //    sh "mkdir -p ${targetDir}"
+//
+    //    def jsonContent = """
+    //    {
+    //        "user": "${user}",
+    //        "path": "${path}"
+    //    }
+    //    """
+//
+    //    writeFile file: "${targetDir}/first_job.json", text: jsonContent
+    //    sh "cat ${targetDir}/first_job.json"
+    //}
+//
+    //stage('Archive JSON') {
+    //    archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
+    //}
 }
