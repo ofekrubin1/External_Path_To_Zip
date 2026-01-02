@@ -22,7 +22,7 @@ node {
     }
 
     stage('Validate PATH parameter') {
-        def pathRegex = '^//dev/files/operation systems/att/db/[^/]+/\d{8}/[^/]*zip[^/]*$'
+        def pathRegex = '^//dev/files/operation systems/att/db/[^/]+/\\d{8}/[^/]*zip[^/]*$'
 
 
         if (!(path ==~ pathRegex)) {
