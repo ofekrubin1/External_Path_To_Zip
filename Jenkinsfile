@@ -11,32 +11,38 @@ properties([
     ])
 ])
 
-node { // Must be inside node for shell and workspace
+node {
 
     def user = env.BUILD_USER_ID
-
-    // Get PATH parameter
     def path = params.PATH
 
     stage('Print parameters') {
-        // Get Jenkins user who triggered the build
-
-
-        // Print to console
         echo "Build triggered by user: ${user}"
         echo "PATH parameter: ${path}"
     }
 
+    stage('Validate PATH parameter') {
+        def pathRegex = '^/dev/files/operation systems/att/db/[^/]+/\\d{8}/[^/]+\\.zip$'
+
+        if (!(path ==~ pathRegex)) {
+            error """
+            Invalid PATH parameter!
+
+            Provided:
+            ${path}
+
+            Expected format:
+            /dev/files/operation systems/att/db/<name>/<YYYYMMDD>/<file>.zip
+            """
+        }
+
+        echo "PATH format is valid"
+    }
+
     stage('Create JSON') {
         def targetDir = "${env.WORKSPACE}/output"
-        echo targetDir
-        // Create folder inside workspace
-        ls -ld /var/lib/jenkins/workspace
-        ls -ld /var/lib/jenkins/workspace/first_job
-
         sh "mkdir -p ${targetDir}"
 
-        // Build JSON content
         def jsonContent = """
         {
             "user": "${user}",
@@ -44,17 +50,11 @@ node { // Must be inside node for shell and workspace
         }
         """
 
-        // Write JSON file
         writeFile file: "${targetDir}/first_job.json", text: jsonContent
-
-        // Print content for debugging
         sh "cat ${targetDir}/first_job.json"
     }
 
     stage('Archive JSON') {
-        // Archive to Jenkins UI
         archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
-
-        echo "Download JSON here: ${env.BUILD_URL}artifact/output/first_job.json"
     }
 }
