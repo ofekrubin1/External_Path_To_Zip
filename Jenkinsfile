@@ -64,9 +64,9 @@ node {
     
         echo "JSON file created at: ${env.WORKSPACE}/${jsonFile}"
     }
-
-
+    
     stage('Archive JSON') {
-        archiveArtifacts artifacts: 'output/first_job.json', fingerprint: true
+    archiveArtifacts artifacts: 'first_job.json', fingerprint: true
     }
+
 }
