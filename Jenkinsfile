@@ -2,7 +2,7 @@
 // Jenkinsfile (Scripted Pipeline)
 // -----------------------------
 
-// 1️⃣ Define job parameters
+// Define job parameters
 properties([
     parameters([
         string(
