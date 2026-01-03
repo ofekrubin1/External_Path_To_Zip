@@ -11,7 +11,7 @@ properties([
     ])
 ])
 
-node {
+node('linux2204-agent') {
 
     def user = env.BUILD_USER_ID
     def path = params.PATH
@@ -65,6 +65,9 @@ node {
         echo "JSON file created at: ${env.WORKSPACE}/${jsonFile}"
     }
     
+    //Take the file from workspace
+    //Copies it into Jenkins’ build record, 
+    //Stores it under that specific build and show it in the UI (even if the workspace is later cleaned)
     stage('Archive JSON') {
     archiveArtifacts artifacts: 'first_job.json', fingerprint: true
     }
