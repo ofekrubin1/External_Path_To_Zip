@@ -13,7 +13,7 @@ properties([
 
 node('linux2204-agent') {
 
-    timestamp {
+    timestamps {
 
         def user = env.BUILD_USER_ID
         def path = params.PATH
