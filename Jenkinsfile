@@ -71,7 +71,7 @@ node('linux2204-agent') {
         //Copies it into Jenkins’ build record, 
         //Stores it under that specific build and show it in the UI (even if the workspace is later cleaned)
         stage('Archive JSON') {
-        archiveArtifacts artifacts: ${jsonFile}, fingerprint: true
+        archiveArtifacts artifacts: jsonFile, fingerprint: true
         }
 
         //stage('Copy to local PC') {
