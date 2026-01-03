@@ -73,7 +73,7 @@ node('linux2204-agent') {
     stage('Copy to local PC') {
     sh """
       ls -la
-      scp first_job.json ofek@192.168.1.46:/C/Users/OFEK/.VirtualBox/tests
+      scp first_job.json root@192.168.1.120:/opt/artifacts
     """
 }
 
