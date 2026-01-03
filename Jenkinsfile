@@ -13,6 +13,17 @@ properties([
 
 node('linux2204-agent') {
 
+    stage('Sanity Check') {
+    // 1. Basic echo test
+    sh 'echo "Shell is working on $(hostname)"'
+    
+    // 2. Check current user and directory
+    sh 'id && pwd'
+    
+    // 3. Verify pathing and common tools
+    sh 'ls --version || echo "ls command failed"'
+    }
+
     def user = env.BUILD_USER_ID
     def path = params.PATH
 
