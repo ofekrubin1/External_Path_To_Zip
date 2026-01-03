@@ -18,7 +18,10 @@ node('linux2204-agent') {
         def user = env.BUILD_USER_ID
         def path = params.MY_PATH
         def build_number = env.BUILD_NUMBER
-        
+
+        def pathRegex
+        def jsonFile
+        def jsonContent
 
         stage('Print parameters') {
             echo "Build triggered by user: ${user}"
@@ -28,7 +31,7 @@ node('linux2204-agent') {
 
         stage('Validate MY_PATH parameter') {
         try {
-            def pathRegex = /^\/\/dev\/files\/operation systems\/att\/db\/[^\/]+\/\d{8}\/[^\/]*zip[^\/]*$/
+            pathRegex = /^\/\/dev\/files\/operation systems\/att\/db\/[^\/]+\/\d{8}\/[^\/]*zip[^\/]*$/
 
             if (!(path ==~ pathRegex)) {
                 throw new Exception("MY_PATH format validation failed")
@@ -54,9 +57,9 @@ node('linux2204-agent') {
         stage('Create JSON') {
         
             // Relative to workspace – Jenkins creates it automatically
-            def jsonFile = 'first_job_' + build_number + '.json'
+            jsonFile = 'first_job_' + build_number + '.json'
 
-            def jsonContent = """
+            jsonContent = """
         {
           "user": "${user}",
           "path": "${path}"
