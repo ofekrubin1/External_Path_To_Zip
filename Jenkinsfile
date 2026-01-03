@@ -6,7 +6,7 @@
 properties([
     parameters([
         string(
-            name: 'PATH',defaultValue: 'default'
+            name: 'MY_PATH',defaultValue: 'default'
         )
     ])
 ])
@@ -16,26 +16,26 @@ node('linux2204-agent') {
     timestamps {
 
         def user = env.BUILD_USER_ID
-        def path = params.PATH
+        def path = params.MY_PATH
 
         stage('Print parameters') {
             echo "Build triggered by user: ${user}"
-            echo "PATH parameter: ${path}"
+            echo "MY_PATH parameter: ${path}"
         }
 
-        stage('Validate PATH parameter') {
+        stage('Validate MY_PATH parameter') {
         try {
             def pathRegex = /^\/\/dev\/files\/operation systems\/att\/db\/[^\/]+\/\d{8}\/[^\/]*zip[^\/]*$/
 
             if (!(path ==~ pathRegex)) {
-                throw new Exception("PATH format validation failed")
+                throw new Exception("MY_PATH format validation failed")
             }
 
-            echo "✅ PATH format is valid"
+            echo "✅ MY_PATH format is valid"
 
         } catch (Exception e) {
             error """
-            ❌ PATH validation error
+            ❌ MY_PATH validation error
 
             Provided:
             ${path}
