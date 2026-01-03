@@ -17,10 +17,12 @@ node('linux2204-agent') {
 
         def user = env.BUILD_USER_ID
         def path = params.MY_PATH
+        def build_number = env.BUILD_NUMBER
 
         stage('Print parameters') {
             echo "Build triggered by user: ${user}"
             echo "MY_PATH parameter: ${path}"
+            echo "Build number is: ${build_number}"
         }
 
         stage('Validate MY_PATH parameter') {
@@ -51,7 +53,7 @@ node('linux2204-agent') {
         stage('Create JSON') {
         
             // Relative to workspace – Jenkins creates it automatically
-            def jsonFile = 'first_job_' + env.BUILD_NUMBER + '.json'
+            def jsonFile = 'first_job_' + build_number + '.json'
 
             def jsonContent = """
         {
