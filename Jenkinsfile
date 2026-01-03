@@ -20,6 +20,7 @@ node('linux2204-agent') {
         def build_number = env.BUILD_NUMBER
 
         def pathRegex
+        
         def jsonFile
         def jsonContent
 
