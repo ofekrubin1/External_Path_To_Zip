@@ -51,7 +51,7 @@ node('linux2204-agent') {
         stage('Create JSON') {
         
             // Relative to workspace – Jenkins creates it automatically
-            def jsonFile = 'first_job.json'
+            def jsonFile = 'first_job_' + env.BUILD_NUMBER + '.json'
 
             def jsonContent = """
         {
