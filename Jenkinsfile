@@ -18,6 +18,7 @@ node('linux2204-agent') {
         def user = env.BUILD_USER_ID
         def path = params.MY_PATH
         def build_number = env.BUILD_NUMBER
+        
 
         stage('Print parameters') {
             echo "Build triggered by user: ${user}"
