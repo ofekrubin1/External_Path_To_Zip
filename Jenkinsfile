@@ -13,10 +13,6 @@ properties([
 
 node('linux2204-agent') {
 
-    stage('Sanity Check') {
-        sh label: 'Testing Bash', script: '/bin/bash -c "echo Hello from Bash"'
-    }
-
     def user = env.BUILD_USER_ID
     def path = params.PATH
 
@@ -74,12 +70,9 @@ node('linux2204-agent') {
     archiveArtifacts artifacts: 'first_job.json', fingerprint: true
     }
 
-    stage('Copy to local PC') {
-    sh """
-      ls -la
-      scp first_job.json root@192.168.1.120:/opt/artifacts
-    """
-}
-
-
+    //stage('Copy to local PC') {
+    //sh """
+    //  scp first_job.json root@192.168.1.120:/opt/artifacts
+    //"""
+    //}
 }
