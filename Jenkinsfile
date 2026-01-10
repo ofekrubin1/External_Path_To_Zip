@@ -51,7 +51,7 @@ Timestamp is: ${timestamp}
             }
 
             stage('Create JSON') {
-                jsonFile = "${build_number}_first_job_${timestamp}.json"
+                jsonFile = "${build_number}_External_Path_To_Zip_${timestamp}.json"
 
                 jsonContent = 
                 """{
@@ -63,9 +63,9 @@ Timestamp is: ${timestamp}
             }
 
             stage('Create Zip') {
-                zipFile = "${build_number}_first_job_${timestamp}.zip"
+                zipFile = "${build_number}_External_Path_To_Zip_${timestamp}.zip"
                 sh "zip -j ${zipFile} ${jsonFile}"
-                sh "scp ${zipFile} 192.168.1.120:~/first_job/${zipFile}"
+                sh "scp ${zipFile} 192.168.1.120:~/External_Path_To_Zip/${zipFile}"
                 println "ZIP file created: ${zipFile}"
             }
 
