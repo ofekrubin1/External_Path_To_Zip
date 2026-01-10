@@ -21,6 +21,7 @@ node('linux2204-agent') {
         def jsonFile
         def jsonContent
         def zipFile
+        def destination = "192.168.1.120:~/External_Path_To_Zip"
 
         try {
 
@@ -65,7 +66,7 @@ Timestamp is: ${timestamp}
             stage('Create Zip') {
                 zipFile = "${build_number}_External_Path_To_Zip_${timestamp}.zip"
                 sh "zip -j ${zipFile} ${jsonFile}"
-                sh "scp ${zipFile} 192.168.1.120:~/External_Path_To_Zip/${zipFile}"
+                sh "scp ${zipFile} ${destination}/${zipFile}"
                 println "ZIP file created: ${zipFile}"
             }
 
