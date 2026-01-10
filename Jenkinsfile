@@ -57,7 +57,7 @@ Timestamp is: ${timestamp}
                 """{
                   "user": "${user}",
                   "path": "${path}"}"""
-                  
+
                 writeFile file: jsonFile, text: jsonContent
                 println "JSON file created: ${jsonFile}"
             }
@@ -80,8 +80,8 @@ Timestamp is: ${timestamp}
             throw e
 
         } finally {
-            //println "🧹 Cleaning workspace..."
-            //cleanWs(deleteDirs: true)
+            println "🧹 Cleaning workspace..."
+            cleanWs(deleteDirs: true)
         }
     }
 }
