@@ -65,12 +65,13 @@ node('linux2204-agent') {
 
             stage('Create Zip') {
                 zipFile = "${build_number}_first_job_${timestamp}.zip"
-                //sh "zip -j ${zipFile} ${jsonFile}"
+                sh "zip -j ${zipFile} ${jsonFile}"
+                sh "scp ${zipFile} 192.168.1.120:~/first_job/${zipFile}"
                 println "ZIP file created: ${zipFile}"
             }
 
             stage('Archive ZIP') {
-                //archiveArtifacts artifacts: zipFile, fingerprint: true
+                archiveArtifacts artifacts: zipFile, fingerprint: true
             }
 
         } catch (Exception e) {
@@ -81,7 +82,7 @@ node('linux2204-agent') {
 
         } finally {
             println "🧹 Cleaning workspace..."
-            cleanWs()
+            cleanWs(deleteDirs: true)
         }
     }
 }
