@@ -82,7 +82,7 @@ Timestamp is: ${timestamp}
         } finally {
             println "🧹 Cleaning workspace..."
             cleanWs(deleteDirs: true)
-            rm -rf ${env.WORKSPACE}@tmp
+            sh "rm -rf ${env.WORKSPACE}@tmp"
         }
     }
 }
