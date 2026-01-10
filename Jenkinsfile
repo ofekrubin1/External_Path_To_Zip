@@ -26,11 +26,11 @@ node('linux2204-agent') {
 
             stage('Print parameters') {
                 println """
-                PARAMETERS:
-                Build triggered by user: ${user}
-                MY_PATH parameter: ${path}
-                Build number is: ${build_number}
-                Timestamp is: ${timestamp}
+PARAMETERS:
+Build triggered by user: ${user}
+MY_PATH parameter: ${path}
+Build number is: ${build_number}
+Timestamp is: ${timestamp}
                 """
             }
 
