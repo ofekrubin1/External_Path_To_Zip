@@ -81,8 +81,8 @@ Timestamp is: ${timestamp}
             throw e
 
         } finally {
-            println "🧹 Cleaning workspace..."
-            cleanWs(deleteDirs: true)
+            //println "🧹 Cleaning workspace..."
+            //cleanWs(deleteDirs: true)
         }
     }
 }
