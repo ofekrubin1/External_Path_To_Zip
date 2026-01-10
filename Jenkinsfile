@@ -18,27 +18,33 @@ node('linux2204-agent') {
         def user = env.BUILD_USER_ID
         def path = params.MY_PATH
         def build_number = env.BUILD_NUMBER
+        def timestamp = new Date().format("yyyyMMdd_HHmmss", TimeZone.getTimeZone('GMT+2:00'))
+
 
         def pathRegex
-        
         def jsonFile
         def jsonContent
+        def zipFile
 
         stage('Print parameters') {
-            echo "Build triggered by user: ${user}"
-            echo "MY_PATH parameter: ${path}"
-            echo "Build number is: ${build_number}"
+            println """
+            PARAMETERS:
+            Build triggered by user: ${user}
+            MY_PATH parameter: ${path}
+            Build number is: ${build_number}
+            Timestamp is: ${timestamp}
+            """
         }
 
         stage('Validate MY_PATH parameter') {
         try {
-            pathRegex = /^\/\/dev\/files\/operation systems\/att\/db\/[^\/]+\/\d{8}\/[^\/]*zip[^\/]*$/
+            pathRegex = /^\\\\dev\\files\\operation systems\\att\\db\\[^\\]+\\\d{8}\\[^\\]*zip[^\\]*$/
 
             if (!(path ==~ pathRegex)) {
                 throw new Exception("MY_PATH format validation failed")
             }
 
-            echo "✅ MY_PATH format is valid"
+            println "✅ MY_PATH format is valid"
 
         } catch (Exception e) {
             error """
@@ -48,7 +54,7 @@ node('linux2204-agent') {
             ${path}
 
             Expected format:
-            //dev/files/operation systems/att/db/<name>/<YYYYMMDD>/<file-containing-zip>
+            \\\\dev\\files\\operation systems\\att\\db\\<name>\\<YYYYMMDD>\\<file-containing-zip>
 
             Details:
             ${e.message}
@@ -58,7 +64,7 @@ node('linux2204-agent') {
         stage('Create JSON') {
         
             // Relative to workspace – Jenkins creates it automatically
-            jsonFile = 'first_job_' + build_number + '.json'
+            jsonFile = build_number + 'first_job_' + timestamp + '.json'
 
             jsonContent = """
         {
@@ -69,20 +75,22 @@ node('linux2204-agent') {
 
             writeFile file: jsonFile, text: jsonContent
 
-            echo "JSON file created at: ${env.WORKSPACE}/${jsonFile}"
+            println "JSON file created at: ${env.WORKSPACE}/${jsonFile}"
         }
 
-        //Take the file from workspace
-        //Copies it into Jenkins’ build record, 
-        //Stores it under that specific build and show it in the UI (even if the workspace is later cleaned)
-        stage('Archive JSON') {
-        archiveArtifacts artifacts: jsonFile, fingerprint: true
+        stage('Create Zip') {
+            zipFile = build_number + 'first_job_' + timestamp + '.zip'
+            sh "zip -j ${zipFile} ${jsonFile}"
+            println "ZIP file created: ${zipFile}"
+        }
+        
+        stage('Archive ZIP') {
+        archiveArtifacts artifacts: zipFile, fingerprint: true
         }
 
-        //stage('Copy to local PC') {
-        //sh """
-        //  scp first_job.json root@192.168.1.120:/opt/artifacts
-        //"""
-        //}
+        stage('Cleanup') {
+            println "Cleaning workspace..."
+            cleanWs()
+        }
     }
 }
