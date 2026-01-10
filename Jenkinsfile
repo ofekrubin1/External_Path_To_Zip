@@ -35,7 +35,7 @@ node('linux2204-agent') {
             }
 
             stage('Validate MY_PATH parameter') {
-                pathRegex = /^\\\\dev\\files\\operation systems\\att\\db\\[^\\]+\\\d{8}\\[^\\]*zip[^\\]*$/
+                pathRegex = /^\\\\dev\\files\\operation systems\\att\\db\\[^\\]+\\\d{8}\\[^\\]*.zip[^\\]*$/
 
                 if (!(path ==~ pathRegex)) {
                     error """
