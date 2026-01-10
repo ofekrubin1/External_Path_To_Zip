@@ -53,12 +53,11 @@ Timestamp is: ${timestamp}
             stage('Create JSON') {
                 jsonFile = "${build_number}_first_job_${timestamp}.json"
 
-                jsonContent = """
-                {
+                jsonContent = 
+                """{
                   "user": "${user}",
-                  "path": "${path}"
-                }
-                """
+                  "path": "${path}"}"""
+                  
                 writeFile file: jsonFile, text: jsonContent
                 println "JSON file created: ${jsonFile}"
             }
