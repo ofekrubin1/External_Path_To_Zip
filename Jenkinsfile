@@ -63,7 +63,7 @@ node('linux2204-agent') {
 
 
                 writeFile file: jsonFile, text: json_content
-                println "JSON file created at: ${env.WORKSPACE}/${json_file}"
+                println "JSON file created at: ${env.WORKSPACE}/${jsonFile}"
             }
 
             stage('Create Zip') {
