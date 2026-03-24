@@ -21,7 +21,7 @@ node('linux2204-agent') {
         def jsonFile
         def jsonContent, json_object
         def zipFile
-        def destination = "192.168.1.120:~/External_Path_To_Zip"
+        def destination = "linux2204-agent:/External_Path_To_Zip"
 
         try {
 
