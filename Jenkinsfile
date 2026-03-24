@@ -19,7 +19,7 @@ node('linux2204-agent') {
 
         def pathRegex
         def jsonFile
-        def jsonContent
+        def jsonContent, json_object
         def zipFile
         def destination = "192.168.1.120:~/External_Path_To_Zip"
 
@@ -27,11 +27,11 @@ node('linux2204-agent') {
 
             stage('Print parameters') {
                 println """
-PARAMETERS:
-Build triggered by user: ${user}
-MY_PATH parameter: ${path}
-Build number is: ${build_number}
-Timestamp is: ${timestamp}
+                PARAMETERS:
+                Build triggered by user: ${user}
+                MY_PATH parameter: ${path}
+                Build number is: ${build_number}
+                Timestamp is: ${timestamp}
                 """
             }
 
@@ -54,13 +54,16 @@ Timestamp is: ${timestamp}
             stage('Create JSON') {
                 jsonFile = "${build_number}_External_Path_To_Zip_${timestamp}.json"
 
-                jsonContent = 
-                """{
-                  "user": "${user}",
-                  "path": "${path}"}"""
+                json_object = [
+                  "user": user,
+                  "path": path
+                ]
+                json_content = groovy.json.JsonOutput.toJson(json_object)
+                println "json content is ${json_content}"
 
-                writeFile file: jsonFile, text: jsonContent
-                println "JSON file created: ${jsonFile}"
+
+                writeFile file: jsonFile, text: json_content
+                println "JSON file created at: ${env.WORKSPACE}/${json_file}"
             }
 
             stage('Create Zip') {
@@ -81,8 +84,13 @@ Timestamp is: ${timestamp}
             throw e
 
         } finally {
-            println "🧹 Cleaning workspace..."
-            cleanWs(deleteDirs: true)
+            stage ('Clean Workspace') {
+                println "🧹 Cleaning workspace..."
+                cleanWs()
+		        ws(pwd()+"@tmp"){
+		        	cleanWs()
+		        }
+            }
         }
     }
 }
